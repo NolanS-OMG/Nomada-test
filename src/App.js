@@ -1,47 +1,15 @@
-import 'antd/dist/antd.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { Upload, message } from 'antd';
-import { InboxOutlined } from '@ant-design/icons';
-
-const { Dragger } = Upload;
-
-const props = {
-  name: 'file',
-  multiple: true,
-  action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-  accept: 'image/*',
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
-};
+import UploadComponent from './UploadComponent';
 
 function App() {
   return (
-    <div>
-      <h1>¿Quién es este actor?</h1>
-      <div>
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Haga click o arrastre una imagen en este área.</p>
-          <p className="ant-upload-hint">
-            Selecciona la foto de un actor famoso para saber quien es o en que películas a estado.
-          </p>
-        </Dragger>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path='/' element={<UploadComponent/>} />
+        <Route path='/actor/:name' element={<h1>Olo</h1>} />
+      </Routes>
+    </Router>
   );
 }
 
