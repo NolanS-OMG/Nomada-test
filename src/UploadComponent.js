@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 
 // 'Upload': Objeto que contiene el 'Dragger', en este caso solo lo utilizamos para eso, seguramente tiene otras utilidades que no conozco
 // 'message': Objeto que contiene un montón de funciones, se ven claramente con un 'console.log()'
-import { Upload, message } from 'antd';
+import { Upload, message, Typography, Space } from 'antd';
 // 'InboxOutlined': Es el logo de una caja que se ve bien padre :v
 import { InboxOutlined } from '@ant-design/icons';
 
@@ -20,7 +20,7 @@ const UploadComponent = () => {
   const { actorData, putActorData } = useAuth();
   const navigate = useNavigate();
 
-  // const [ localActorData, setLocalActorData ] = useState(actorData);
+  const { Title } = Typography
 
   useEffect( () => {
     if (actorData.actorName) {
@@ -51,15 +51,14 @@ const UploadComponent = () => {
       })
       .then(res => {
         onSuccess(file);
-        console.log(res);
-        if (res.data.error.lenght !== 0) {
-          putActorData(res.data);
+        if (res.data.error === 'No sé quien es, intenta con otra foto') {
+          alert(res.data.error);
         } else {
-          onError( {event: res.data.error} );
+          putActorData(res.data);
         }
       })
       .catch(err=>{
-        const error = new Error('Some error');
+        const error = new Error(err);
         onError({event:error});
       });
     },
@@ -68,36 +67,48 @@ const UploadComponent = () => {
     // 'onChange': Cuando cambia el 'estado de subida' ósea, desde que se empieza a subir hasta que termina, esta función de ejecuta
     onChange(info) {
       const { status } = info.file;
-      if (status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
       if (status === 'done') {
         message.success(`${info.file.name} file uploaded successfully.`);
       } else if (status === 'error') {
         message.error(`${info.file.name} file upload failed.`);
       }
-    },
-    // 'onDrop': Cuando se arrastra un archivo, esta función se ejecuta
-    onDrop(e) {
-      console.log('Dropped files', e.dataTransfer.files);
-    },
+    }
   };
 
   return (
-    <div>
-      <h1>¿Quién es este actor?</h1>
-      <div>
-        <Dragger {...props}>
-          <p className="ant-upload-drag-icon">
-            <InboxOutlined />
-          </p>
-          <p className="ant-upload-text">Haga click o arrastre una imagen en este área.</p>
-          <p className="ant-upload-hint">
-            Selecciona la foto de un actor famoso para saber quien es o en que películas a estado.
-          </p>
-        </Dragger>
-      </div>
-    </div>
+    <Space 
+      direction="vertical" 
+      size={30}
+      align='center'
+      style={
+        { 
+          display: 'flex',
+          padding: '35px',
+          margin: 'auto',
+          boxShadow: '0px 0px 5px #dedeff',
+          background:'white'
+        }
+      }
+    >
+      <Title>¿Quién es este actor?</Title>
+      <Dragger {...props}>
+        <p className="ant-upload-drag-icon">
+          <InboxOutlined />
+        </p>
+        <p className="ant-upload-text">Haga click o arrastre una imagen en este área.</p>
+        <p 
+          className="ant-upload-hint"
+          style={
+            { 
+              marginLeft: '5px',
+              marginRight: '5px',
+            }
+          }
+        >
+          Selecciona la foto de un actor famoso para saber quien es o en que películas a estado.
+        </p>
+      </Dragger>
+    </Space>
   )
 }
 
