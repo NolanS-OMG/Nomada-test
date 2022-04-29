@@ -1,17 +1,11 @@
-// Es la primera vez que uso ANTD, en la rama 'test' pondré muchos comentarios explicativos por si la uso de nuevo
-
-// Importamos el CSS que está dentro de /node_modules
 import 'antd/dist/antd.css';
 
-// 'Upload': Objeto que contiene el 'Dragger', en este caso solo lo utilizamos para eso, seguramente tiene otras utilidades que no conozco
-// 'message': Objeto que contiene un montón de funciones, se ven claramente con un 'console.log()'
 import { Upload, message, Typography, Space } from 'antd';
-// 'InboxOutlined': Es el logo de una caja que se ve bien padre :v
 import { InboxOutlined } from '@ant-design/icons';
 
 import axios from 'axios';
 
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../AuthProvider';
 import { useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,16 +23,11 @@ const UploadComponent = () => {
     }
   }, [actorData, navigate] )
 
-  // Aquí sacamos el 'Dragger'
   const { Dragger } = Upload;
 
-  // El nombre del objeto es 'props' pero no se refiere a los atributos de un componente padre, solo es su nombre
   const props = {
-    // 'name' es equivalente a 'type' de los input
     name: 'file',
-    // 'multiple': Si es true, permite subir mas de un archivo AL MISMO TIEMPO (arrastrando con control o eligiendo varios), si es false solo uno
     multiple: false,
-    // En vez de usar 'action' que solo sube el archivo, usamos 'customRequest' para que se ejecute la función que necesitemos
     customRequest(options) {
       const { onSuccess, onError, file } = options;
       const fmData = new FormData();
@@ -62,9 +51,7 @@ const UploadComponent = () => {
         onError({event:error});
       });
     },
-    // 'accept': Equivalente al 'accept' de los 'input'
-    accept: 'image/*',
-    // 'onChange': Cuando cambia el 'estado de subida' ósea, desde que se empieza a subir hasta que termina, esta función de ejecuta
+    accept: '.jpg,.jpeg,.png',
     onChange(info) {
       const { status } = info.file;
       if (status === 'done') {
